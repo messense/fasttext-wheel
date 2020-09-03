@@ -1,6 +1,7 @@
 #!/bin/bash
 set -e -x
 
+sed -i "s/name='fasttext',/name='fasttext-wheel',/" fastText/setup.py
 cd fastText
 
 # Compile wheels

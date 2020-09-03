@@ -32,6 +32,7 @@ jobs:
       - name: Build macOS wheels
         if: matrix.os == 'macos-latest'
         run: |
+            sed -i '' "s/name='fasttext',/name='fasttext-wheel',/" fastText/setup.py
             pip install wheel delocate
             cd fastText
             python setup.py sdist bdist_wheel
