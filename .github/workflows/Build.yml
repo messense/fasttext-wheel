@@ -26,8 +26,8 @@ jobs:
       - name: Build manylinux1 wheels
         if: matrix.os == 'ubuntu-latest'
         run: |
-            docker run --rm -v `pwd`:/io -w /io quay.io/pypa/manylinux1_x86_64 sh manylinux.sh
-            docker run --rm -v `pwd`:/io -w /io quay.io/pypa/manylinux1_i686 sh manylinux.sh
+            docker run --rm -v `pwd`:/io -w /io quay.io/pypa/manylinux2010_x86_64 sh manylinux.sh
+            docker run --rm -v `pwd`:/io -w /io quay.io/pypa/manylinux2010_i686 sh manylinux.sh
             ls -lrth dist/
       - name: Build macOS wheels
         if: matrix.os == 'macos-latest'
