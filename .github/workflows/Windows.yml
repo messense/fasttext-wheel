@@ -1,0 +1,42 @@
+on: [push, pull_request]
+
+name: Windows Build
+
+jobs:
+  build:
+    name: Build
+    runs-on: windows-latest
+    strategy:
+      matrix:
+        python-version: [3.5, 3.6, 3.7, 3.8]
+        arch: [x64, x86]
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/checkout@v2
+        with:
+          repository: facebookresearch/fastText
+          ref: v0.9.2
+          path: fastText
+      - name: Set up Python
+        uses: actions/setup-python@v1
+        with:
+          architecture: ${{ matrix.arch }}
+          python-version: ${{ matrix.python-version }}
+      - name: Display Python version
+        run: python -c "import sys; print(sys.version)"
+      - name: Install visualcpp-build-tools
+        run: choco install -y visualcpp-build-tools
+      - name: Build Windows wheels
+        run: |
+            sed -i "s/name='fasttext',/name='fasttext-wheel',/" fastText/setup.py
+            pip install wheel
+            cd fastText
+            python setup.py bdist_wheel -d ../dist
+            cd ..
+            ls -lrth dist/
+        shell: bash
+      - name: Publish Windows package
+        if: github.event_name == 'push' && startsWith(github.event.ref, 'refs/tags')
+        run: |
+            pip install twine
+            TWINE_USERNAME=__token__ TWINE_PASSWORD=${{ secrets.pypi_password }} twine upload --skip-existing dist/*
