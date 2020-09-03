@@ -40,3 +40,4 @@ jobs:
         run: |
             pip install twine
             TWINE_USERNAME=__token__ TWINE_PASSWORD=${{ secrets.pypi_password }} twine upload --skip-existing dist/*
+        shell: bash
