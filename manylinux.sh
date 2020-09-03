@@ -15,5 +15,5 @@ done
 
 # Bundle external shared libraries into the wheels
 for whl in dist/fasttext*.whl; do
-    auditwheel repair --plat manylinux2010_x86_64 "$whl" -w /io/dist/
+    auditwheel repair "$whl" -w /io/dist/
 done

@@ -1,0 +1,35 @@
+on: [push, pull_request]
+
+name: Linux Build
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [3.7]
+        arch: ["x86_64", "i686"]
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/checkout@v2
+        with:
+          repository: facebookresearch/fastText
+          ref: v0.9.2
+          path: fastText
+      - name: Set up Python
+        uses: actions/setup-python@v1
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Display Python version
+        run: python -c "import sys; print(sys.version)"
+      - name: Build manylinux wheels
+        run: |
+            docker run --rm -v `pwd`:/io -w /io quay.io/pypa/manylinux2010_${{ matrix.arch }} sh manylinux.sh
+            ls -lrth dist/
+      - name: Publish manylinux package
+        if: github.event_name == 'push' && startsWith(github.event.ref, 'refs/tags')
+        uses: pypa/gh-action-pypi-publish@master
+        with:
+          user: __token__
+          password: ${{ secrets.pypi_password }}
