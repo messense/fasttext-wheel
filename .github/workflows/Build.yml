@@ -1,0 +1,51 @@
+on: [push, pull_request]
+
+name: Build
+
+jobs:
+  build:
+    name: Build
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+        python-version: [3.7]
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/checkout@v2
+        with:
+          repository: facebookresearch/fastText
+          ref: v0.9.2
+          path: fastText
+      - name: Set up Python
+        uses: actions/setup-python@v1
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Display Python version
+        run: python -c "import sys; print(sys.version)"
+      - name: Build manylinux1 wheels
+        if: matrix.os == 'ubuntu-latest'
+        run: |
+            docker run --rm -v `pwd`:/io -w /io quay.io/pypa/manylinux1_x86_64 sh manylinux.sh
+            docker run --rm -v `pwd`:/io -w /io quay.io/pypa/manylinux1_i686 sh manylinux.sh
+            ls -lrth dist/
+      - name: Build macOS wheels
+        if: matrix.os == 'macos-latest'
+        run: |
+            pip install wheel delocate
+            cd fastText
+            python setup.py sdist bdist_wheel
+            delocate-wheel -w ../dist -v dist/fasttext*.whl
+            cd ..
+            ls -lrth dist/
+      - name: Publish macOS package
+        if: matrix.os == 'macos-latest' && github.event_name == 'push' && startsWith(github.event.ref, 'refs/tags')
+        run: |
+            pip install twine
+            TWINE_USERNAME=__token__ TWINE_PASSWORD=${{ secrets.pypi_password }} twine upload --skip-existing dist/*
+      - name: Publish manylinux1 package
+        if: matrix.os == 'ubuntu-latest' && github.event_name == 'push' && startsWith(github.event.ref, 'refs/tags')
+        uses: pypa/gh-action-pypi-publish@master
+        with:
+          user: __token__
+          password: ${{ secrets.pypi_password }}
