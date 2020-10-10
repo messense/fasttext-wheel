@@ -9,7 +9,7 @@ for PYBIN in /opt/python/cp27*/bin; do
     "${PYBIN}/python" setup.py bdist_wheel
 done
 
-for PYBIN in /opt/python/cp3[5678]*/bin; do
+for PYBIN in /opt/python/cp3[56789]*/bin; do
     "${PYBIN}/python" setup.py bdist_wheel
 done
 
