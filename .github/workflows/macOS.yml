@@ -17,22 +17,43 @@ jobs:
           ref: v0.9.2
           path: fastText
       - name: Set up Python
-        uses: actions/setup-python@v2
+        uses: conda-incubator/setup-miniconda@v2
         with:
+          architecture: x64
           python-version: ${{ matrix.python-version }}
-      - name: Display Python version
-        run: python -c "import sys; print(sys.version)"
+          miniconda-version: latest
       - name: Build macOS wheels
+        shell: bash -l {0}
         run: |
+            export MACOSX_DEPLOYMENT_TARGET=10.9
+            curl -sqL https://github.com/phracker/MacOSX-SDKs/releases/download/10.15/MacOSX10.9.sdk.tar.xz | tar -xC $HOME
+            # set minimum sdk version to our target
+            plutil -replace MinimumSDKVersion -string ${MACOSX_DEPLOYMENT_TARGET} $(xcode-select -p)/Platforms/MacOSX.platform/Info.plist
+            plutil -replace DTSDKName -string macosx${MACOSX_DEPLOYMENT_TARGET}internal $(xcode-select -p)/Platforms/MacOSX.platform/Info.plist
+            conda create -qy -n fasttext_venv python=${{ matrix.python-version }} wheel
+            conda init bash
+            source ~/.bash_profile
+            conda activate fasttext_venv
+            python -c "import sys; print(sys.version)"
             sed -i '' "s/name='fasttext',/name='fasttext-wheel',/" fastText/setup.py
-            pip install wheel delocate
+            sed -i '' '/mac_osx_version/d' fastText/setup.py
             cd fastText
+            export CFLAGS="${CFLAGS} -isysroot $HOME/MacOSX10.9.sdk"
+            export CXXFLAGS="${CXXFLAGS} -isysroot $HOME/MacOSX10.9.sdk"
             python setup.py bdist_wheel
+            pip install delocate
             delocate-wheel -w ../dist -v dist/fasttext*.whl
             cd ..
             ls -lrth dist/
+      - name: Archive macOS wheel
+        uses: actions/upload-artifact@v2
+        with:
+          name: fasttext-wheel
+          path: |
+            dist/fasttext_wheel-*.whl
       - name: Publish macOS package
         if: github.event_name == 'push' && startsWith(github.event.ref, 'refs/tags')
         run: |
+            conda activate fasttext_venv
             pip install twine
             TWINE_USERNAME=__token__ TWINE_PASSWORD=${{ secrets.pypi_password }} twine upload --skip-existing dist/*
