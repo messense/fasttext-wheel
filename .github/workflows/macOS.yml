@@ -53,6 +53,7 @@ jobs:
             dist/fasttext_wheel-*.whl
       - name: Publish macOS package
         if: github.event_name == 'push' && startsWith(github.event.ref, 'refs/tags')
+        shell: bash -l {0}
         run: |
             conda activate fasttext_venv
             pip install twine
