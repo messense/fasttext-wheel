@@ -8,7 +8,7 @@ jobs:
     runs-on: windows-latest
     strategy:
       matrix:
-        python-version: [3.5, 3.6, 3.7, 3.8, 3.9]
+        python-version: [3.8]
         arch: [x64, x86]
     steps:
       - uses: actions/checkout@v2
@@ -31,7 +31,7 @@ jobs:
             sed -i "s/name='fasttext',/name='fasttext-wheel',/" fastText/setup.py
             pip install wheel
             cd fastText
-            python setup.py bdist_wheel -d ../dist
+            python setup.py bdist_wheel -d ../dist --py-limited-api=cp35
             cd ..
             ls -lrth dist/
         shell: bash

@@ -9,8 +9,8 @@ for PYBIN in /opt/python/cp27*/bin; do
     "${PYBIN}/python" setup.py bdist_wheel
 done
 
-for PYBIN in /opt/python/cp3[56789]*/bin; do
-    "${PYBIN}/python" setup.py bdist_wheel
+for PYBIN in /opt/python/cp3[8]*/bin; do
+    "${PYBIN}/python" setup.py bdist_wheel --py-limited-api=cp35
 done
 
 # Bundle external shared libraries into the wheels
