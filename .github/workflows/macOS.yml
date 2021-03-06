@@ -45,12 +45,11 @@ jobs:
             delocate-wheel -w ../dist -v dist/fasttext*.whl
             cd ..
             ls -lrth dist/
-      - name: Archive macOS wheel
+      - name: Upload wheels
         uses: actions/upload-artifact@v2
         with:
-          name: fasttext-wheel
-          path: |
-            dist/fasttext_wheel-*.whl
+          name: macos-wheels
+          path: dist/fasttext_wheel-*.whl
       - name: Publish macOS package
         if: github.event_name == 'push' && startsWith(github.event.ref, 'refs/tags')
         shell: bash -l {0}
