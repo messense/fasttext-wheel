@@ -38,6 +38,7 @@ deactivate
 cd ..
 
 # auditwheel symbols
+python3 -m pip install -U auditwheel-symbols
 for whl in dist/fasttext*.whl; do
     auditwheel-symbols "$whl"
 done
