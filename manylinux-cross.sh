@@ -35,6 +35,13 @@ pip install wheel
 python setup.py bdist_wheel --plat-name "manylinux2014_$ARCH" --dist-dir ../dist/
 deactivate
 
+python3.10 -m pip install crossenv
+python3.10 -m crossenv /opt/python/cp310-cp310/bin/python3 --cc $TARGET_CC --cxx $TARGET_CXX --sysroot $SYSROOT venv-py310
+. venv-py310/bin/activate
+pip install wheel
+python setup.py bdist_wheel --plat-name "manylinux2014_$ARCH" --dist-dir ../dist/
+deactivate
+
 cd ..
 
 # auditwheel symbols
