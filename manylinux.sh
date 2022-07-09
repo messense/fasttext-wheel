@@ -5,7 +5,7 @@ sed -i "s/name='fasttext',/name='fasttext-wheel',/" fastText/setup.py
 cd fastText
 
 # Compile wheels
-for PYBIN in /opt/python/cp3{6..10}/bin; do
+for PYBIN in /opt/python/cp3{6..10}*/bin; do
     "${PYBIN}/python" setup.py bdist_wheel
 done
 
