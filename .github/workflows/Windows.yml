@@ -45,7 +45,7 @@ jobs:
           name: windows-wheels
           path: dist/fasttext_wheel-*.whl
       - name: Publish Windows package
-        if: github.event_name == 'push' && startsWith(github.event.ref, 'refs/tags')
+        if: github.event_name == 'workflow_dispatch' || startsWith(github.event.ref, 'refs/tags')
         run: |
             pip install twine
             TWINE_USERNAME=__token__ TWINE_PASSWORD=${{ secrets.pypi_password }} twine upload --skip-existing dist/*

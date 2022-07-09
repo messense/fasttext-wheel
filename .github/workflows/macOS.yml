@@ -55,7 +55,7 @@ jobs:
           name: macos-wheels
           path: dist/fasttext_wheel-*.whl
       - name: Publish macOS package
-        if: github.event_name == 'push' && startsWith(github.event.ref, 'refs/tags')
+        if: github.event_name == 'workflow_dispatch' || startsWith(github.event.ref, 'refs/tags')
         shell: bash -l {0}
         run: |
             conda activate fasttext_venv

@@ -37,7 +37,7 @@ jobs:
           name: linux-wheels
           path: dist/fasttext_wheel-*.whl
       - name: Publish manylinux package
-        if: github.event_name == 'push' && startsWith(github.event.ref, 'refs/tags')
+        if: github.event_name == 'workflow_dispatch' || startsWith(github.event.ref, 'refs/tags')
         uses: pypa/gh-action-pypi-publish@master
         with:
           user: __token__
@@ -68,7 +68,7 @@ jobs:
           name: linux-wheels
           path: dist/fasttext_wheel-*.whl
       - name: Publish manylinux package
-        if: github.event_name == 'push' && startsWith(github.event.ref, 'refs/tags')
+        if: github.event_name == 'workflow_dispatch' || startsWith(github.event.ref, 'refs/tags')
         uses: pypa/gh-action-pypi-publish@master
         with:
           user: __token__
