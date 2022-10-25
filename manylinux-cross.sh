@@ -7,40 +7,19 @@ cd fastText
 SYSROOT=`$TARGET_CC --print-sysroot`
 
 # Compile wheels
-python3.6 -m pip install crossenv
-python3.6 -m crossenv /opt/python/cp36-cp36m/bin/python3 --cc $TARGET_CC --cxx $TARGET_CXX --sysroot $SYSROOT venv-py36
-. venv-py36/bin/activate
-pip install wheel
-python setup.py bdist_wheel --plat-name "manylinux2014_$ARCH" --dist-dir ../dist/
-deactivate
-
-python3.7 -m pip install crossenv
-python3.7 -m crossenv /opt/python/cp37-cp37m/bin/python3 --cc $TARGET_CC --cxx $TARGET_CXX --sysroot $SYSROOT venv-py37
-. venv-py37/bin/activate
-pip install wheel
-python setup.py bdist_wheel --plat-name "manylinux2014_$ARCH" --dist-dir ../dist/
-deactivate
-
-python3.8 -m pip install crossenv
-python3.8 -m crossenv /opt/python/cp38-cp38/bin/python3 --cc $TARGET_CC --cxx $TARGET_CXX --sysroot $SYSROOT venv-py38
-. venv-py38/bin/activate
-pip install wheel
-python setup.py bdist_wheel --plat-name "manylinux2014_$ARCH" --dist-dir ../dist/
-deactivate
-
-python3.9 -m pip install crossenv
-python3.9 -m crossenv /opt/python/cp39-cp39/bin/python3 --cc $TARGET_CC --cxx $TARGET_CXX --sysroot $SYSROOT venv-py39
-. venv-py39/bin/activate
-pip install wheel
-python setup.py bdist_wheel --plat-name "manylinux2014_$ARCH" --dist-dir ../dist/
-deactivate
-
-python3.10 -m pip install crossenv
-python3.10 -m crossenv /opt/python/cp310-cp310/bin/python3 --cc $TARGET_CC --cxx $TARGET_CXX --sysroot $SYSROOT venv-py310
-. venv-py310/bin/activate
-pip install wheel
-python setup.py bdist_wheel --plat-name "manylinux2014_$ARCH" --dist-dir ../dist/
-deactivate
+for PY_MINOR in 7 8 9 10 11; do
+  PYTHON="python3.${PY_MINOR}"
+  PYTHON_ABI="cp3${PY_MINOR}-cp3${PY_MINOR}"
+  if [ "$PY_MINOR" = "7" ]; then
+     PYTHON_ABI="${PYTHON_ABI}m"
+  fi
+  $PYTHON -m pip install crossenv
+  $PYTHON -m crossenv "/opt/python/${PYTHON_ABI}/bin/python3" --cc $TARGET_CC --cxx $TARGET_CXX --sysroot $SYSROOT "venv-py3${PY_MINOR}"
+  . "venv-py3${PY_MINOR}/bin/activate"
+  pip install wheel
+  python setup.py bdist_wheel --plat-name "manylinux2014_$ARCH" --dist-dir ../dist/
+  deactivate
+done
 
 cd ..
 

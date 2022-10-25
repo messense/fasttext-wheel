@@ -1,5 +1,7 @@
 on:
   push:
+    branches:
+      - master
   pull_request:
   workflow_dispatch:
 
@@ -12,7 +14,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python-version: [3.6, 3.7, 3.8, 3.9, '3.10']
+        python-version: [3.7, 3.8, 3.9, '3.10', '3.11-dev']
         arch: [x64, x86]
     steps:
       - uses: actions/checkout@v2
@@ -22,7 +24,7 @@ jobs:
           ref: main
           path: fastText
       - name: Set up Python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v4
         with:
           architecture: ${{ matrix.arch }}
           python-version: ${{ matrix.python-version }}
