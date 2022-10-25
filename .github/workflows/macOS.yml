@@ -27,6 +27,7 @@ jobs:
         with:
           architecture: x64
           python-version: ${{ matrix.python-version }}
+          channels: conda-forge
           miniconda-version: latest
       - name: Build macOS wheels
         shell: bash -l {0}
