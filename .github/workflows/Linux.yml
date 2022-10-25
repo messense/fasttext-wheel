@@ -31,7 +31,7 @@ jobs:
         run: python -c "import sys; print(sys.version)"
       - name: Build manylinux wheels
         run: |
-            docker run --rm -v `pwd`:/io -w /io quay.io/pypa/manylinux2010_${{ matrix.arch }} sh manylinux.sh
+            docker run --rm -v `pwd`:/io -w /io quay.io/pypa/manylinux2014_${{ matrix.arch }} sh manylinux.sh
             ls -lrth dist/
       - name: Upload wheels
         uses: actions/upload-artifact@v2
