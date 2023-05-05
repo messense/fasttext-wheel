@@ -3,6 +3,7 @@ set -e -x
 
 sed -i "s/name='fasttext',/name='fasttext-wheel',/" fastText/setup.py
 cd fastText
+cp ../pyproject.toml .
 
 # Build a sdist
 /opt/python/cp310-cp310/bin/python setup.py sdist

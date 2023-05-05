@@ -3,6 +3,7 @@ set -e -x
 
 sed -i "s/name='fasttext',/name='fasttext-wheel',/" fastText/setup.py
 cd fastText
+cp ../pyproject.toml .
 
 SYSROOT=`$TARGET_CC --print-sysroot`
 
