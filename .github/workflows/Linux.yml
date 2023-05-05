@@ -37,7 +37,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: linux-wheels
-          path: dist/fasttext_wheel-*.whl
+          path: dist/fasttext_wheel-*
       - name: Publish manylinux package
         if: github.event_name == 'workflow_dispatch' || startsWith(github.event.ref, 'refs/tags')
         uses: pypa/gh-action-pypi-publish@master
