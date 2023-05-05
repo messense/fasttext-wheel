@@ -7,6 +7,7 @@ cp ../pyproject.toml .
 
 # Build a sdist
 /opt/python/cp310-cp310/bin/python setup.py sdist
+mkdir -p /io/dist/
 mv dist/*.tar.gz /io/dist/
 
 # Compile wheels
