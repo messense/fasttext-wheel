@@ -14,17 +14,17 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python-version: ['3.10']
+        python-version: ['3.12']
         arch: ["x86_64", "i686"]
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
         with:
           repository: facebookresearch/fastText
           ref: v0.9.2
           path: fastText
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
       - name: Display Python version
@@ -34,7 +34,7 @@ jobs:
             docker run --rm -v `pwd`:/io -w /io quay.io/pypa/manylinux2014_${{ matrix.arch }} sh manylinux.sh
             ls -lrth dist/
       - name: Upload wheels
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: linux-wheels
           path: dist/fasttext_wheel-*
@@ -54,8 +54,8 @@ jobs:
       matrix:
         arch: ["aarch64", "armv7l", "s390x", "ppc64le", "ppc64"]
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
         with:
           repository: facebookresearch/fastText
           ref: master
@@ -65,7 +65,7 @@ jobs:
             docker run -e ARCH=${{ matrix.arch }} --rm -v `pwd`:/io -w /io messense/manylinux2014-cross:${{ matrix.arch }} sh manylinux-cross.sh
             ls -lrth dist/
       - name: Upload wheels
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: linux-wheels
           path: dist/fasttext_wheel-*.whl
