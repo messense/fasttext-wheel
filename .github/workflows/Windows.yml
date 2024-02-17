@@ -42,7 +42,7 @@ jobs:
             ls -lrth dist/
         shell: bash
       - name: Upload wheels
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v3
         with:
           name: windows-wheels
           path: dist/fasttext_wheel-*.whl

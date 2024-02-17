@@ -34,7 +34,7 @@ jobs:
             docker run --rm -v `pwd`:/io -w /io quay.io/pypa/manylinux2014_${{ matrix.arch }} sh manylinux.sh
             ls -lrth dist/
       - name: Upload wheels
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v3
         with:
           name: linux-wheels
           path: dist/fasttext_wheel-*
@@ -65,7 +65,7 @@ jobs:
             docker run -e ARCH=${{ matrix.arch }} --rm -v `pwd`:/io -w /io messense/manylinux2014-cross:${{ matrix.arch }} sh manylinux-cross.sh
             ls -lrth dist/
       - name: Upload wheels
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v3
         with:
           name: linux-wheels
           path: dist/fasttext_wheel-*.whl
