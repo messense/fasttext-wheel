@@ -14,17 +14,17 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python-version: [3.7, 3.8, 3.9, '3.10', '3.11-dev']
+        python-version: [3.7, 3.8, 3.9, '3.10', '3.11', '3.12']
         arch: [x64, x86]
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
         with:
           repository: messense/fastText
           ref: main
           path: fastText
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           architecture: ${{ matrix.arch }}
           python-version: ${{ matrix.python-version }}
@@ -42,7 +42,7 @@ jobs:
             ls -lrth dist/
         shell: bash
       - name: Upload wheels
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: windows-wheels
           path: dist/fasttext_wheel-*.whl

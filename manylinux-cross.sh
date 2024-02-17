@@ -8,7 +8,7 @@ cp ../pyproject.toml .
 SYSROOT=`$TARGET_CC --print-sysroot`
 
 # Compile wheels
-for PY_MINOR in 7 8 9 10 11; do
+for PY_MINOR in 7 8 9 10 11 12; do
   PYTHON="python3.${PY_MINOR}"
   PYTHON_ABI="cp3${PY_MINOR}-cp3${PY_MINOR}"
   if [ "$PY_MINOR" = "7" ]; then

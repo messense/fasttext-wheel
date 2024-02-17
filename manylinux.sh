@@ -11,7 +11,7 @@ mkdir -p /io/dist/
 mv dist/*.tar.gz /io/dist/
 
 # Compile wheels
-for PYBIN in /opt/python/cp3{7..11}*/bin; do
+for PYBIN in /opt/python/cp3{7..12}*/bin; do
     "${PYBIN}/python" setup.py bdist_wheel
 done
 
