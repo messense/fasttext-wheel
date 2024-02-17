@@ -12,7 +12,8 @@ mv dist/*.tar.gz /io/dist/
 
 # Compile wheels
 for PYBIN in /opt/python/cp3{7..12}*/bin; do
-    "${PYBIN}/python" setup.py bdist_wheel
+    "${PYBIN}/python" -m pip install build
+    "${PYBIN}/python" -m build --wheel -o /io/dist/
 done
 
 # Bundle external shared libraries into the wheels

@@ -18,7 +18,7 @@ for PY_MINOR in 7 8 9 10 11 12; do
   $PYTHON -m pip install https://github.com/virtuald/crossenv/archive/refs/heads/py-311.zip
   $PYTHON -m crossenv "/opt/python/${PYTHON_ABI}/bin/python3" --cc $TARGET_CC --cxx $TARGET_CXX --sysroot $SYSROOT "venv-py3${PY_MINOR}"
   . "venv-py3${PY_MINOR}/bin/activate"
-  pip install wheel
+  pip install wheel setuptools
   python setup.py bdist_wheel --plat-name "manylinux2014_$ARCH" --dist-dir ../dist/
   deactivate
 done
